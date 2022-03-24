@@ -12,9 +12,11 @@ def abrirYLeerArchivo(rutaArchivo):
     return textoOriginal
 
 def solamenteMinusculas(texto):
+    textoSinMayusculas = []
     for linea in texto:
-        linea.lower()
-    return texto
+        lineaEnMinusculas = linea.lower()
+        textoSinMayusculas.append(lineaEnMinusculas)
+    return textoSinMayusculas
 
 def purgadorDeSignosDePuntuacion(texto):
     for linea in texto:
