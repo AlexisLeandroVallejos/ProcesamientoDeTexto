@@ -19,9 +19,11 @@ def solamenteMinusculas(texto):
     return textoSinMayusculas
 
 def purgadorDeSignosDePuntuacion(texto):
+    textoSinPuntuacion = []
     for linea in texto:
-        re.sub(regexSignosDePuntuacion, regexReemplazo, linea)
-    return texto
+        lineaSinPuntuacion = re.sub(regexSignosDePuntuacion, regexReemplazo, linea)
+        textoSinPuntuacion.append(lineaSinPuntuacion)
+    return textoSinPuntuacion
 
 def crearListaDeListas(texto):
     listaDeListas = []
@@ -47,8 +49,8 @@ def obtenerLasPrimerasCincoPalabrasSegunCantidadDeOcurrencias(contadorDePalabras
 def procesar(rutaArchivo):
     textoOriginal = abrirYLeerArchivo(rutaArchivo)
     textoEnMinusculas = solamenteMinusculas(textoOriginal)
-    textoPurgado = purgadorDeSignosDePuntuacion(textoEnMinusculas)
-    listaDeListas = crearListaDeListas(textoPurgado)
+    textoSinSignosDePuntuacion = purgadorDeSignosDePuntuacion(textoEnMinusculas)
+    listaDeListas = crearListaDeListas(textoSinSignosDePuntuacion)
     listaAplanada = aplanarListaDeListas(listaDeListas)
     contadorDePalabras = contarOcurrenciaDePalabras(listaAplanada)
     mostrarResultados(contadorDePalabras)
