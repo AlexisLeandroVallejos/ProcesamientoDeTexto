@@ -7,7 +7,8 @@ parse = Parseador
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    parse.procesar("king_lear.txt")
+    texto = parse.obtenerTextoParseado("..\king_lear.txt")
+    parse.mostrarResultados(texto)
 
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
