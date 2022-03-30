@@ -4,59 +4,36 @@ from collections import Counter
 LAS_PRIMERAS_CINCO = 5
 regexSignosDePuntuacion = r'[.,;:"\\\'()\[\]{}?¿!¡—-]'
 regexReemplazo = r' '
+regexVacia = r''
 regexPalabra = r'\w+'
 
 def abrirYLeerArchivo(rutaArchivo):
     with open(rutaArchivo, 'r') as archivo:
-        textoOriginal = archivo.readlines()
-    return textoOriginal
+        return archivo.read()
 
 def solamenteMinusculas(texto):
-    textoSinMayusculas = []
-    for linea in texto:
-        lineaEnMinusculas = linea.lower()
-        textoSinMayusculas.append(lineaEnMinusculas)
-    return textoSinMayusculas
+    return texto.lower()
 
 def purgadorDeSignosDePuntuacion(texto):
-    textoSinPuntuacion = []
-    for linea in texto:
-        lineaSinPuntuacion = re.sub(regexSignosDePuntuacion, regexReemplazo, linea)
-        textoSinPuntuacion.append(lineaSinPuntuacion)
-    return textoSinPuntuacion
+    return re.sub(regexSignosDePuntuacion, regexVacia, texto)
 
-def crearListaDeListas(texto):
-    listaDeListas = []
-    for linea in texto:
-        listaDePalabras = re.findall(regexPalabra, linea)
-        listaDeListas.append(listaDePalabras)
-    return listaDeListas
+def contarOcurrenciaDePalabras(texto):
+    return Counter(re.findall(regexPalabra, texto))
 
-def aplanarListaDeListas(listaDeListas):
-    listaAplanada = [palabra for listaDePalabras in listaDeListas for palabra in listaDePalabras]
-    return listaAplanada
-
-def contarOcurrenciaDePalabras(listaAplanada):
-    contadorDePalabras = Counter(listaAplanada)
-    return contadorDePalabras
-
-def contarCantidadDePalabrasEnTotal(contadorDePalabras):
-    return len(contadorDePalabras)
+def contarCantidadDePalabrasEnTotal(contadorDePalabras: Counter):
+    return sum(contadorDePalabras.values())
 
 def obtenerLasPrimerasCincoPalabrasSegunCantidadDeOcurrencias(contadorDePalabras):
     return contadorDePalabras.most_common(LAS_PRIMERAS_CINCO)
 
-def procesar(rutaArchivo):
-    textoOriginal = abrirYLeerArchivo(rutaArchivo)
-    textoEnMinusculas = solamenteMinusculas(textoOriginal)
-    textoSinSignosDePuntuacion = purgadorDeSignosDePuntuacion(textoEnMinusculas)
-    listaDeListas = crearListaDeListas(textoSinSignosDePuntuacion)
-    listaAplanada = aplanarListaDeListas(listaDeListas)
-    contadorDePalabras = contarOcurrenciaDePalabras(listaAplanada)
-    mostrarResultados(contadorDePalabras)
-    return contadorDePalabras #Crear nuevo archivo de texto para el siguiente punto?
+def obtenerTextoParseado(rutaArchivo):
+    texto = abrirYLeerArchivo(rutaArchivo)
+    texto = solamenteMinusculas(texto)
+    texto = purgadorDeSignosDePuntuacion(texto)
+    return texto
 
-def mostrarResultados(contadorDePalabras):
+def mostrarResultados(texto):
+    contadorDePalabras = contarOcurrenciaDePalabras(texto)
     print(contadorDePalabras)
     print("Cantidad de Palabras: "+str(contarCantidadDePalabrasEnTotal(contadorDePalabras)))
     print("--------------------------------------------------")
@@ -65,5 +42,3 @@ def mostrarResultados(contadorDePalabras):
     for (palabra, cantidad) in lasCincoMasUsadas:
         print(palabra)
     print("-------------------------END-------------------------")
-
-
